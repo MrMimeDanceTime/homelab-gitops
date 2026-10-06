@@ -1,0 +1,22 @@
+# The app-of-apps: every Application in this directory, this one included.
+# Talos creates it once at bootstrap; from then on it is managed from here.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MrMimeDanceTime/homelab-gitops.git
+    targetRevision: main
+    path: clusters/k8s-dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
